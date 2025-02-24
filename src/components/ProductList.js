@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AddToCartButton from './AddToCartButton';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
 
-  // Replace the URL below with your backend endpoint that returns a list of products.
   useEffect(() => {
     axios.get('http://localhost:8080/api/products')
-      .then(response => setProducts(response.data))
+      .then(response => {
+        console.log('Products:', response.data);
+        setProducts(response.data);
+      })
       .catch(err => console.error('Error fetching products:', err));
   }, []);
 
@@ -18,12 +21,12 @@ const ProductList = () => {
           <p>No products available</p>
       ) : (
         <ul>
-          {products.map(p => (
-            <li key={p.id}>
-              <h3>{p.name}</h3>
-              <p>{p.description}</p>
-              <p>Price: ${p.price}</p>
-              {/* Optionally add a button to add the product to the cart */}
+          {products.map(product => (
+            <li key={product.id}>
+              <h3>{product.name}</h3>
+              <p>{product.description}</p>
+              <p>Price: ${product.price}</p>
+              <AddToCartButton productId={product.id} />
             </li>
           ))}
         </ul>
